@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+        <meta name="description" content="" />
+        <meta name="author" content="" />
+        <title>Developers Conference 2022</title>
+     
+        <!-- Font Awesome icons (free version)-->
+        <script src="{{ url_for('static', filename='js/all.js')}}"></script>
+       
+        <!-- Core theme CSS (includes Bootstrap)-->
+        <link href="{{  url_for('static', filename='css/styles.css')}}" rel="stylesheet" />
+    </head>
+    <body id="page-top">
+        <!-- Navigation-->
+        <nav class="navbar navbar-expand-lg navbar-dark fixed-top" id="mainNav" style="background-color:black !important;">
+            <div class="container">
+                <a class="navbar-brand" href="#page-top">
+                Distrupts 2022</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+                    Menu
+                    <i class="fas fa-bars ms-1"></i>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarResponsive">
+                    <ul class="navbar-nav text-uppercase ms-auto py-4 py-lg-0">
+                        <li class="nav-item"><a class="nav-link" href="#top">Home</a></li>
+                        <li class="nav-item"><a class="nav-link" href="#portfolio">Sessions</a></li>
+                        <li class="nav-item"><a class="nav-link" href="#hostels">Hostels</a></li>
+                        <li class="nav-item"><a class="nav-link" href="#speakers">Speakers</a></li>
+                        <li class="nav-item"><a class="nav-link" href="{{url_for('discussion')}}">Join Discussion</a></li>
+                        <li class="nav-item"><a class="nav-link" href="#speakers" data-bs-toggle="modal" data-bs-target="#exampleModal">Contact Us</a></li>
+                        {% if session.get('loggedin') != None: %} <!--i.e if user is logged in-->
+                            <li class="nav-item"><a class="nav-link" href="#">Hello {{userdeets_user_fname}}</a></li>
+                            <li class="nav-item"><a class="nav-link" href="{{ url_for('logout') }}">Logout</a></li>
+
+                        {% else %}
+                            <li class="nav-item"><a class="nav-link" href="{{ url_for('register') }}">Register</a></li>
+                            <li class="nav-item"><a class="nav-link" href="{{ url_for('home') }}">Login</a></li>
+                        {% endif %}    
+                    </ul>
+                </div>
+            </div>
+        </nav>
+
+
+        {% block pagecontent %}
+
+        {% endblock %}
+ 
+
+        <!-- Footer-->
+        <footer class="footer py-4" style="background-color: #ffc800;">
+            <div class="container">
+                <div class="row align-items-center">
+                    <div class="col-lg-4 text-lg-start">Copyright &copy; Your Website 2021</div>
+                    <div class="col-lg-4 my-3 my-lg-0">
+                        
+                    </div>
+                    <div class="col-lg-4 text-lg-end">
+                        <a class="link-dark text-decoration-none me-3" href="#!">Privacy Policy</a>
+                        <a class="link-dark text-decoration-none" href="#!">Terms of Use</a>
+                    </div>
+                </div>
+            </div>
+        </footer>
+       
+         <!-- Modal -->
+  <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Send us a Message here</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <form action="{{url_for('sub_msg')}}" method="post" class="myform">
+              <div class="row">
+                  <div class="feedback mb-4"></div>
+                
+                <div class="col-12 mb-2">
+                    {{contactus.fullname.label}}
+                    {{contactus.fullname(class_='form-control', placeholder='Fullname')}}
+                    <span>{{contactus.fullname.errors}}</span>
+                </div>
+
+                <div class="col-12 mb-2">
+                    {{contactus.email.label}}
+                    {{contactus.email(class_='form-control', placeholder='Email here')}}
+                    <span>{{contactus.email.errors}}</span>
+                </div>
+
+
+                <div class="col-12 mb-2">
+                    {{contactus.message.label}}
+                    {{contactus.message(class_='form-control', placeholder='Your Message here')}}
+                </div>
+
+
+                <div class="col-12 mb-2">
+                    {{contactus.submitbtn(class_='btn btn-outline-warning', type="button")}}
+                    {{contactus.csrf_token}}
+                </div>
+            </div>  
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+        
+        <!-- Button trigger modal -->
+
+        <!-- Bootstrap core JS-->
+        <script src="{{ url_for('static', filename='js/bootstrap.bundle.min.js')}}"></script>
+        <!-- Core theme JS-->
+        <script src="{{ url_for('static', filename='js/scripts.js')}}"></script>
+        <script src="{{ url_for('static', filename='jquery/jquerymin.js') }}"></script>
+        <script type="text/javascript" language="javascript">
+            $(document).ready( function() {
+                $('#submitbtn').click( function() {
+                    var email = $('#email').val()
+                    var fullname = $('#fullname').val()
+                    var message = $('#message').val()
+                
+                    //Make Ajax request
+                    //$.ajax.({key:value, key:value, ......key:value})
+                    var csrf = '{{ csrf_token()}}'
+
+                    //method1 - construct data as json
+                    var tosend = {'fullname':fullname, 'email':email, 'message':message, 'csrf_token':csrf}
+
+                    //method2 - construct data as query string
+                    var tosend2 = 'fullname='+fullname+'&email='+email+'&message='+message+'&csrf_token='+csrf
+
+                    //method3
+                    var tosend3 = $('.myform').serialize() //for when you have multiple values and you dont want to type each one out
+                    //alert(tosend3)
+
+                    $.ajax({ 
+                        url:'{{ url_for("sub_msg")}}', 
+                        type: 'get',
+                        data:tosend3,
+                        dataType:'json',
+                        success:function(rsp){
+                            // $('.feedback').text(rsp)
+                            // $('.feedback').addClass('alert alert-success')
+                            // $('#email').val('')
+                            // $('#fullname').val('')
+                            // $('#message').val('')
+                            // $('#submitbtn').val('SEND')
+
+                            alert(rsp['id'])
+                            //alert(rsp.id)
+                            alert(rsp['msg'])
+                            console.log(rsp)
+                        },
+                        error:function(err){
+                            console.log(err)
+                            $('#submitbtn').val('ERROR')
+                        },
+                        beforeSend:function(){
+                            //$('#submitbtn').val('Please wait...')
+                            //$('#submitbtn').html('<img src="">')
+                            alert('We are sending your request now..')
+                        }
+                    });
+
+                });
+                
+            });
+        </script>
+       
+    </body>
+</html>

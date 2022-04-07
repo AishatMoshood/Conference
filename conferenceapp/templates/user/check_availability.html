@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+        <meta name="description" content="" />
+        <meta name="author" content="" />
+        <title>Check Availability</title>
+
+        <!-- Font Awesome icons (free version)-->
+        <script src="{{ url_for('static', filename='js/all.js')}}"></script>
+        
+        <!-- Core theme CSS (includes Bootstrap)-->
+        <link href="{{  url_for('static', filename='css/styles.css')}}" rel="stylesheet" />
+    </head>
+
+    <body>
+        <div class="container">
+            <div class="row">
+                <div class="col p-5">
+                    <h1>Sign Up Form</h1>
+                    <form action="">
+                        
+                        <div class="mb-3">
+                            <label for="" class="mb-3">Enter Username</label>
+                            <input type="text" name="username" id="username" class="form-control mb-3">
+                            <button class="btn btn-lg btn-danger" type="button" id="check">Check username</button>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="" class="mb-3">Enter Email</label>
+                            <input type="text" name="email" id="email" class="form-control">
+                        </div>
+                    
+                        <div>
+                            <button class="btn btn-lg btn-success text-center" id="btnsubmit">Submit Form</button>
+                        </div>
+                       
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <script src="{{ url_for('static', filename='jquery/jquerymin.js') }}"></script>
+        <script type="text/javascript" language="javascript">
+            $(document).ready( function() {
+                $('#check').click( function() {
+                    var username = $('#username').val()
+                    data2send='us='+username
+                    $.ajax({
+                        url: '/check/result',
+                        type:'get',
+                        data:data2send,
+                        success: function(msg){
+                            if (msg == 'Available') {
+                                alert(msg)
+                                $('#btnsubmit').attr('disabled','disabled')
+                            } else {
+                                alert(msg)
+                                $('#btnsubmit').removeAttr('disabled','disabled')
+                            }
+                        },
+                        error: function(err) {
+
+                        }
+                    })
+                })
+            });
+        </script>
+    </body>
+</html>

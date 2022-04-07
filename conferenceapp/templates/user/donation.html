@@ -1,0 +1,54 @@
+{% extends 'user/layout.html' %}
+{% block pagecontent %}
+        <!-- Portfolio Grid-->
+        <section class="page-section bg-light mt-5" id="portfolio" style="margin-bottom: 15px;">
+            <div class="container">
+                <div class="text-center">
+                    <h2 class="section-heading text-uppercase">Donate HERE</h2>
+                    <h3 class="section-subheading text-muted">Impact lives positively with your donation, no matter how little</h3>
+                </div>
+                <div class="row">
+                    
+                    <div class="col-8 offset-2" style="background-color: white; padding: 3em">
+                        
+         <form action="" method="post"> 
+
+          {% with m = get_flashed_messages() %}
+            {% for i in m %}
+              <p class="alert alert-info">{{m}}</p>
+            {% endfor %}
+          {% endwith %}
+          <div>
+            <input type="hidden" name="csrf_token" value="{{csrf_token()}}">
+          </div> 
+          
+        <div class="row mb-2">
+            <div class="col-md-6">
+                <input type="text" class="form-control" placeholder="Fullname" name="fullname">
+            </div>
+            <div class="col-md-6">
+                <input type="text" class="form-control" placeholder="Enter your email address" name="email">
+            </div>
+        </div>
+
+        <div class="row mb-2">
+            <div class="col">
+                <input type="text" class="form-control" placeholder="Enter an Amount" name="amt">
+            </div>
+        </div>
+
+        <div>
+            <button type="submit" class="btn btn-warning" style="width: 100%;">Donate</button>
+        </div>
+    </form>
+
+                    </div>
+                     
+                    
+                </div>
+            </div>
+        </section>
+  
+      {% endblock %} 
+       
+       

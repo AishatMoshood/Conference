@@ -1,0 +1,76 @@
+{% extends 'user/layout.html' %}
+
+{% block pagecontent %}
+<section class="page-section bg-light" style="min-height:90vh">
+    <div class="container">
+       <div class="row">
+
+
+           <div class="col">
+                <div class="">
+                    <p><b>Post Title:</b> {{postdeets.p_title}}</p>
+                </div>
+
+                <div class="">
+                    <p><b>Description:</b> {{postdeets.p_desc}}</p>
+                </div>
+
+                <div class="">
+                    <p>Post By: {{postdeets.duser.user_fname}}</p>
+                </div>
+
+                <div class="">
+                    <p>Date: {{postdeets.p_date}}</p>
+                </div>
+
+                <input type="hidden" id="postid" name="postid" value="{{postdeets.p_id}}">
+
+                {{commentdeets}}
+                <div>
+                    <label for="comment" class="form-label text-bold">Comment</label><br>
+                    <textarea name="comment" id="comment" cols="60" rows="8"></textarea>
+                </div>
+
+                <button type="submit" class="btn btn-lg btn-warning" id="btnpost">Post</button>
+
+                <div id="mycomment">
+                    {% for c in commentdeets %}
+                    <div class="row">
+                        <div class="col text-center mt-5">
+                            {{ c.c_comment}}
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+           </div>
+     
+            
+       </div>
+    </div>
+</section>
+
+<script src="{{ url_for('static', filename='jquery/jquerymin.js') }}"></script>
+
+<script type="text/javascript" language="javascript">
+    $(document).ready( function() {
+        $('#btnpost').click(function() {
+            var usercomment = $('#comment').val()
+            var csrf = '{{ csrf_token() }}'
+            var postid = $('#postid').val()
+            var data = {'comment':usercomment, 'csrf_token':csrf, 'postid':postid}
+            $.ajax({
+                url:'/post/comment',
+                type:'post',
+                data:data,
+                success:function(msg) {
+                    $('#mycomment').prepend('<div class="row"><div class="col">'+msg+'</div></div>')
+                },
+                error:function(err){
+                    console.log(err)
+                } 
+            })
+        })
+    })
+</script>
+       
+ {% endblock %} 

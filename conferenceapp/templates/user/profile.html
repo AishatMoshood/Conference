@@ -1,0 +1,101 @@
+{% extends 'user/layout.html' %}
+
+{% block pagecontent %}
+<section class="page-section bg-light" style="min-height:90vh">
+    <div class="container-fluid">
+ <div class="d-flex" id="wrapper">
+            <!-- Sidebar-->
+            <div class="border-end bg-white" id="sidebar-wrapper">
+                 
+                <div class="list-group list-group-flush">
+                    <a class="list-group-item list-group-item-action list-group-item-light p-3" href="#">Dashboard</a>
+                     
+                    <a class="list-group-item list-group-item-action list-group-item-light p-3" href="/user/editprofile">My Profile</a>
+                    <a class="list-group-item list-group-item-action list-group-item-light p-3" href="#!">Payments</a>
+                    <a class="list-group-item list-group-item-action list-group-item-light p-3" href="/breakout">Break Out Session</a>
+                    <a class="list-group-item list-group-item-action list-group-item-light p-3" href="#!">Log Out</a>
+                </div>
+            </div>
+            <!-- Page content wrapper-->
+            <div id="page-content-wrapper">
+                
+                <!-- Page content-->
+                <div class="container-fluid">
+                    <h1 class="mt-4">My Profile</h1>
+                    <p>Edit your profile by completing the form below.</p>
+
+ 
+                     
+                </div>
+
+                <div class="container">
+                                       <div class="row">
+<div class="col-10 offset-1">
+    <form action="/user/update/{{useredits.user_id}}" method="post" class="row g-3">
+      <input type="hidden" name="csrf_token" value="{{csrf_token()}}">
+  <div class="col-md-6">
+    <label for="inputEmail4" class="form-label">First Name</label>
+    <input type="text" class="form-control" id="inputEmail4" value="{{useredits.user_fname}}" name="fname">
+  </div>
+  <div class="col-md-6">
+    <label for="inputPassword4" class="form-label">Last Name</label>
+    <input type="text" class="form-control" id="inputPassword4" value="{{useredits.user_lname}}" name="lname">
+  </div>
+   
+   <div class="col-md-6">
+    <label for="inputState" class="form-label">Skill Level</label>
+    <select id="inputState" class="form-select" name="skill">
+      {% for i in all_levels %}
+        {% if i.skill_id == useredits.user_skillid %}
+          <option value="{{i.skill_id}}" selected>{{i.skill_name}}</option>
+        {% else %}
+          <option value="{{i.skill_id}}" >{{i.skill_name}}</option>
+        {% endif %}
+      {% endfor %}
+    </select>
+  </div>
+  <div class="col-6">
+    <label for="inputAddress2" class="form-label">Phone No</label>
+    {% if useredits.user_phone == None: %}
+      <input type="text" class="form-control"  placeholder="No phone number provided" value="No phone number provided" name="phone">
+    {% else %}
+      <input type="text" class="form-control"  placeholder="Phone No" value="{{useredits.user_phone}}" name="phone">
+    {% endif %}
+  </div>
+  <div class="col-md-6">
+    <label for="inputCity" class="form-label">Address</label>
+
+  
+    <input type="text" class="form-control"  placeholder="Phone No" value="{{useredits.user_address}}" name="address">
+    
+  </div>
+  <div class="col-md-6">
+    <label for="inputState" class="form-label">State</label>
+    <select id="inputState" class="form-select" name="state">
+      {% for j in all_states %}
+        {% if j.state_id == useredits.user_stateid %}
+          <option  value="{{j.state_id}}" selected>{{j.state_name}}</option>
+        {% else %} 
+        <option  value="{{j.state_id}}">{{j.state_name}}</option>
+      {% endif %}
+      {% endfor %}
+    </select>
+  </div>
+   
+  
+  <div class="col-12 text-center">
+    <button type="submit" class="btn btn-outline-primary btn-lg">Update Details</button>
+  </div>
+</form>
+</div>
+                    </div>
+                </div>
+
+                
+
+            </div>
+        </div>    
+    </div>
+</section>
+       
+{% endblock %}

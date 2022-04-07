@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+        <meta name="description" content="" />
+        <meta name="author" content="" />
+        <title>Load LGA</title>
+
+        <!-- Font Awesome icons (free version)-->
+        <script src="{{ url_for('static', filename='js/all.js')}}"></script>
+        
+        <!-- Core theme CSS (includes Bootstrap)-->
+        <link href="{{  url_for('static', filename='css/styles.css')}}" rel="stylesheet" />
+    </head>
+
+    <body>
+        <div class="container">
+            <div class="row">
+                <div class="col p-5">
+                    <h1>Sign Up Form</h1>
+                    <form action="" method="post">
+                        
+                        <div class="mb-3">
+                            <label for="" class="mb-3">Choose State</label>
+                            <select name="state" id="state">
+                                <option value="">Choose State</option>
+                                {% for i in states %}
+                                <option value="{{i.state_id}}">{{i.state_name}}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="" class="mb-3">Select LGA</label>
+                            <div id="lga" class="mb-3"></div>
+                        </div>
+                    
+                        <div>
+                            <button class="btn btn-lg btn-success text-center" id="btnsubmit">Submit Form</button>
+                        </div>
+                       
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <script src="{{ url_for('static', filename='jquery/jquerymin.js') }}"></script>
+        <script type="text/javascript" language="javascript">
+           $(document).ready(function() {
+                $('#state').change(function(){
+                    var stateid=$(this).val()
+                    var csrf="{{ csrf_token() }}"
+                    data2send={"stateid":stateid,"csrf_token":csrf}
+                    //make ajax call
+                    $.ajax({
+                        url:'/demo/lga',
+                        data:data2send,
+                        type:'post',
+                        success:function(msg){
+                        $('#lga').html(msg)
+                        }            
+                    })
+                })
+           })
+        </script>
+    </body>
+</html>
